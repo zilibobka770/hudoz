@@ -1,0 +1,91 @@
+<nav>
+    <button id="logoutButton" style="display: none;" onclick="logout()">Выйти</button>
+    <a id="loginButton" href="/login">Войти</a>
+    <a id="registerButton" href="/register">Регистрация</a>
+    <a id="createBlog" href="/createBlog">Добавить пост</a>
+</nav>
+
+<style>
+    nav {
+        display: flex; /* Расположение элементов в ряд */
+        justify-content: center; /* Центрирование элементов по горизонтали */
+        padding: 10px; /* Внутренние отступы */
+        background-color: #f8f9fa; /* Цвет фона */
+        border-bottom: 1px solid #e7e7e7; /* Граница снизу */
+    }
+
+    nav button, nav a {
+        padding: 10px 15px; /* Внутренние отступы */
+        margin: 0 5px; /* Отступы между кнопками и ссылками */
+        text-decoration: none; /* Убрать подчеркивание у ссылок */
+        color: #007bff; /* Цвет текста */
+        font-size: 16px; /* Размер шрифта */
+        border: 1px solid #007bff; /* Граница */
+        border-radius: 5px; /* Скругление углов */
+        background-color: #fff; /* Белый фон */
+        cursor: pointer; /* Курсор в виде указателя */
+    }
+
+    nav button:hover, nav a:hover {
+        background-color: #007bff; /* Цвет фона при наведении */
+        color: #fff; /* Белый цвет текста при наведении */
+        text-decoration: none; /* Убрать подчеркивание у ссылок */
+    }
+
+    #logoutButton {
+        display: none; /* Скрыть кнопку выхода по умолчанию */
+    }
+</style>
+
+<script>
+    function updateAuthUI() {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        const userRole = localStorage.getItem('userRole');
+
+        const commentForms = document.querySelectorAll('.comment-form');
+        if (isAuthenticated && userRole === 'user') {
+            commentForms.forEach(form => form.style.display = 'block');
+        } else {
+            commentForms.forEach(form => form.style.display = 'none');
+        }
+
+        if (isAuthenticated && userRole === 'admin') {
+            document.getElementById('logoutButton').style.display = 'block';
+            document.querySelectorAll('.edit-button').forEach(btn => btn.style.display = 'inline-block');
+            document.querySelectorAll('.delete-button').forEach(btn => btn.style.display = 'inline-block');
+            if (document.getElementById('createBlog')) {
+                document.getElementById('createBlog').style.display = 'block';
+            }
+            document.getElementById('loginButton').style.display = 'none';
+            document.getElementById('registerButton').style.display = 'none';
+        } else if (isAuthenticated && userRole === 'user') {
+            document.querySelectorAll('.edit-button').forEach(btn => btn.style.display = 'none');
+            document.querySelectorAll('.delete-button').forEach(btn => btn.style.display = 'none');
+            if (document.getElementById('createBlog')) {
+                document.getElementById('createBlog').style.display = 'none';
+            }
+            document.getElementById('logoutButton').style.display = 'block';
+            document.getElementById('loginButton').style.display = 'none';
+            document.getElementById('registerButton').style.display = 'none';
+        } else {
+            document.getElementById('logoutButton').style.display = 'none';
+            document.querySelectorAll('.edit-button').forEach(btn => btn.style.display = 'none');
+            document.querySelectorAll('.delete-button').forEach(btn => btn.style.display = 'none');
+            if (document.getElementById('createBlog')) {
+                document.getElementById('createBlog').style.display = 'none';
+            }
+            document.getElementById('loginButton').style.display = 'block';
+            document.getElementById('registerButton').style.display = 'block';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', updateAuthUI);
+    function logout() {
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('userRole')
+        updateAuthUI();
+        window.location.href = '/login';
+    }
+
+</script>
+

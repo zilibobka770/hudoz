@@ -1,0 +1,54 @@
+<h2>Вход</h2>
+<form id="loginForm" action="/login" method="POST">
+    <div>
+        <label for="username">Имя пользователя:</label>
+        <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit">Войти</button>
+    <div id="message" style="display: none; color: red; margin-bottom: 10px;"></div>
+</form>
+<a href="/blogs">Вернуться на главную</a>
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.token && data.role) {
+                        localStorage.setItem('isAuthenticated', data.token);
+                        localStorage.setItem('userRole', data.role)
+                        window.location.href = '/blogs';
+                        updateAuthUI();
+                    } else {
+                        console.error('Ошибка входа. Токен не получен.');
+                        if(data.error) {
+                            alert(data.error);
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error('Ошибка:', error);
+                    const messageElement = document.getElementById('message');
+                    messageElement.textContent = 'Неверный логин или пароль';
+                    messageElement.style.display = 'block';
+                });
+    });
+
+</script>

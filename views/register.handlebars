@@ -1,0 +1,63 @@
+<h2>Регистрация</h2>
+<form id="registrationForm">
+    <div>
+        <label for="username">Имя пользователя:</label>
+        <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit">Регистрация</button>
+    <div id="error-message" style="display: none; color: red; margin-bottom: 10px;"></div>
+    <div id="success-message" style="display: none; color: green; margin-bottom: 10px;"></div>
+</form>
+<a href="/blogs">Вернуться на главную</a>
+<script>
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        fetch('/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        })
+                .then(response => {
+                    if (response.ok) {
+                        const successMessageElement = document.getElementById('success-message');
+                        successMessageElement.textContent = 'Регистрация прошла успешно. Вы будете перенаправлены на страницу входа.';
+                        successMessageElement.style.display = 'block';
+
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 2000);
+                    } else {
+                        console.error('Ошибка регистрации');
+                        setTimeout(() => {
+                            window.location.href = '/register';
+                        }, 2000);
+                        return response.text().then(text => {
+                            const errorMessageElement = document.getElementById('error-message');
+                            try {
+                                const data = JSON.parse(text);
+                                errorMessageElement.textContent = data.error || 'Произошла ошибка при регистрации. Попробуйте снова.';
+                            } catch {
+                                errorMessageElement.textContent = text;
+                            }
+                            errorMessageElement.style.display = 'block';
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+    });
+</script>

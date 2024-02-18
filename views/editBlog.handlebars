@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать пост</title>
+</head>
+<body>
+<h1>Редактировать пост</h1>
+<form id="editBlogForm" action="/blog/update/{{blog.id}}">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" value="{{blog.title}}" required>
+
+    <label for="desc">Description:</label>
+    <textarea id="desc" name="desc">{{blog.desc}}</textarea>
+
+    <label for="image">Image URL:</label>
+    <input type="text" id="image" name="image" value="{{blog.image}}">
+
+    <button type="submit">Update</button>
+</form>
+<script>
+    document.getElementById('editBlogForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        fetch('/blog/update/{{blog.id}}', {
+            method: 'PUT',
+            body: JSON.stringify(Object.fromEntries(formData)),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('isAuthenticated')}`
+            },
+        })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/blogs';
+                    } else {
+                        throw new Error('Failed to update blog post');
+                    }
+                })
+                .then(data => {
+                    console.log(data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+    });
+</script>
+</body>
+</html>

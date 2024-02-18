@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пост</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Шрифт для всей страницы */
+        }
+
+        h2 {
+            text-align: center; /* Центрирование заголовка */
+            color: #333; /* Цвет текста заголовка */
+        }
+
+        form#loginForm {
+            max-width: 400px; /* Максимальная ширина формы */
+            margin: 20px auto; /* Центрирование формы на странице */
+            padding: 20px; /* Внутренние отступы формы */
+            border: 1px solid #ddd; /* Граница вокруг формы */
+            border-radius: 5px; /* Скругление углов формы */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Тень вокруг формы */
+            background-color: #fff; /* Фон формы */
+        }
+
+        form#loginForm div {
+            margin-bottom: 15px; /* Отступы между полями формы */
+        }
+
+        form#loginForm label {
+            display: block; /* Лейблы над полями ввода */
+            margin-bottom: 5px; /* Отступ между лейблом и полем ввода */
+            font-weight: bold; /* Жирное начертание текста лейблов */
+        }
+
+        form#loginForm input[type="text"],
+        form#loginForm input[type="password"] {
+            width: 100%; /* Полная ширина ввода внутри формы */
+            padding: 8px; /* Внутренние отступы полей ввода */
+            margin-bottom: 10px; /* Отступы между полями ввода */
+            border: 1px solid #ccc; /* Граница поля ввода */
+            border-radius: 4px; /* Скругление углов поля ввода */
+        }
+
+        form#loginForm button[type="submit"] {
+            width: 100%; /* Полная ширина кнопки внутри формы */
+            padding: 10px; /* Внутренние отступы кнопки */
+            background-color: #007bff; /* Цвет фона кнопки */
+            color: white; /* Цвет текста кнопки */
+            border: none; /* Убрать стандартную границу */
+            border-radius: 4px; /* Скругление углов кнопки */
+            cursor: pointer; /* Курсор в виде указателя */
+            font-size: 16px; /* Размер шрифта текста кнопки */
+        }
+
+        form#loginForm button[type="submit"]:hover {
+            background-color: #0056b3; /* Цвет фона кнопки при наведении */
+        }
+
+        form#registrationForm {
+            max-width: 400px; /* Максимальная ширина формы */
+            margin: 20px auto; /* Центрирование формы на странице */
+            padding: 20px; /* Внутренние отступы формы */
+            border: 1px solid #ddd; /* Граница вокруг формы */
+            border-radius: 5px; /* Скругление углов формы */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Тень вокруг формы */
+            background-color: #fff; /* Фон формы */
+        }
+
+        form#registrationForm div {
+            margin-bottom: 15px; /* Отступы между полями формы */
+        }
+
+        form#registrationForm label {
+            display: block; /* Лейблы над полями ввода */
+            margin-bottom: 5px; /* Отступ между лейблом и полем ввода */
+            font-weight: bold; /* Жирное начертание текста лейблов */
+        }
+
+        form#registrationForm input[type="text"],
+        form#registrationForm input[type="password"] {
+            width: 100%; /* Полная ширина ввода внутри формы */
+            padding: 8px; /* Внутренние отступы полей ввода */
+            margin-bottom: 10px; /* Отступы между полями ввода */
+            border: 1px solid #ccc; /* Граница поля ввода */
+            border-radius: 4px; /* Скругление углов поля ввода */
+        }
+
+        form#registrationForm button[type="submit"] {
+            width: 100%; /* Полная ширина кнопки внутри формы */
+            padding: 10px; /* Внутренние отступы кнопки */
+            background-color: #28a745; /* Цвет фона кнопки */
+            color: white; /* Цвет текста кнопки */
+            border: none; /* Убрать стандартную границу */
+            border-radius: 4px; /* Скругление углов кнопки */
+            cursor: pointer; /* Курсор в виде указателя */
+            font-size: 16px; /* Размер шрифта текста кнопки */
+        }
+
+        form#registrationForm button[type="submit"]:hover {
+            background-color: #218838; /* Цвет фона кнопки при наведении */
+        }
+
+        a {
+            display: block; /* Ссылка на новой строке */
+            text-align: center; /* Центрирование ссылки */
+            margin-top: 20px; /* Отступ сверху */
+        }
+
+    </style>
+</head>
+
+<body>
+{{> navbar }}
+
+{{{body}}}
+</body>
+</html>

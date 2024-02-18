@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Блог</title>
+    <style>
+        .blog-item, h1 {
+            max-width: 800px; /* Максимальная ширина блока поста */
+            margin: 20px auto; /* Центрирование блока поста */
+            border: 1px solid #ddd; /* Граница вокруг каждого поста */
+            padding: 20px; /* Отступы внутри поста */
+            border-radius: 5px; /* Скругление углов */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Тень вокруг блока поста */
+        }
+
+        .blog-title {
+            margin-bottom: 20px; /* Отступ заголовка от контента */
+        }
+
+        .blog-content {
+            display: flex;
+            justify-content: center; /* Центрирование контента */
+            align-items: center; /* Вертикальное центрирование */
+            margin-bottom: 20px; /* Отступ от комментариев */
+        }
+
+        .blog-image {
+            max-width: 40%; /* Максимальная ширина изображения */
+            margin-right: 20px; /* Отступ между изображением и описанием */
+        }
+
+        .blog-description {
+            max-width: 60%; /* Максимальная ширина описания */
+        }
+
+        .comments-section {
+            width: 100%; /* Полная ширина блока комментариев */
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comment-textarea {
+            margin-bottom: 10px; /* Отступ от кнопки */
+            padding: 8px; /* Внутренние отступы поля ввода */
+        }
+
+        .comment-submit-button {
+            padding: 5px; /* Внутренние отступы кнопки */
+            background-color: #007bff; /* Цвет фона кнопки */
+            color: white; /* Цвет текста кнопки */
+            border: none; /* Убрать стандартную рамку */
+            border-radius: 4px; /* Скругление углов кнопки */
+            cursor: pointer; /* Курсор в виде указателя */
+        }
+
+        .comment-submit-button:hover {
+            background-color: #0056b3; /* Цвет фона кнопки при наведении */
+        }
+    </style>
+
+</head>
+<body>
+<h1>Список Художников</h1>
+
+{{#each blogs}}
+    <div class="blog-item">
+        <h2 class="blog-title">{{title}}</h2>
+        <div class="blog-content">
+            <img src="{{image}}" alt="{{title}} logo" class="blog-image">
+            <div class="blog-description">
+                <p>{{desc}}</p>
+                <button class="delete-button" onclick="deleteBrand('{{id}}')">Удалить</button>
+                <button class="edit-button" onclick="edit('{{id}}')">Редактировать</button>
+            </div>
+        </div>
+
+        <div class="comments-section">
+            <h3>Комментарии</h3>
+            <ul id="comments-list-{{id}}" class="comments-list"></ul>
+            <form onsubmit="addComment(event, '{{id}}')" class="comment-form">
+                <textarea name="comment" required class="comment-textarea"></textarea>
+                <button type="submit" class="comment-submit-button">Добавить комментарий</button>
+            </form>
+        </div>
+    </div>
+{{/each}}
+
+
+
+<script>
+
+    updateAuthUI()
+
+    async function edit(blogId) {
+        window.location.href=`/blog/edit/${blogId}`
+    }
+
+
+    async function deleteBrand(blogId) {
+        try {
+            const response = await fetch(`/deleteBlog/${blogId}`, {
+                method: 'DELETE',
+
+            });
+
+            if (response.ok) {
+                console.log('Brand deleted successfully');
+
+                window.location.reload();
+            } else {
+                const errorData = await response.json();
+                console.error('Error deleting brand:', errorData);
+            }
+        } catch (error) {
+            console.error('Error deleting brand:', error);
+        }
+    }
+
+    async function addComment(event, blogId) {
+        event.preventDefault();
+        const form = event.target;
+        const comment = form.querySelector('textarea[name="comment"]').value;
+
+        const response = await fetch('/addComment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ blogId, comment }),
+        });
+
+        if (response.ok) {
+            console.log('Комментарий добавлен');
+            form.reset();
+            loadComments(blogId);
+        } else {
+            console.error('Ошибка при добавлении комментария');
+        }
+    }
+
+    async function loadComments(blogId) {
+        const response = await fetch(`/getComments/${blogId}`);
+        const comments = await response.json();
+
+        const commentsList = document.getElementById(`comments-list-${blogId}`);
+        commentsList.innerHTML = '';
+
+        comments.forEach(comment => {
+            const li = document.createElement('li');
+            li.textContent = comment;
+            commentsList.appendChild(li);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const blogIds = [...document.querySelectorAll('.blog-item')].map(item => item.dataset.blogId);
+        blogIds.forEach(blogId => loadComments(blogId));
+    });
+</script>
+</body>
+</html>

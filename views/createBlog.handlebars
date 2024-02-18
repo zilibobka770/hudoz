@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать пост</title>
+</head>
+<body>
+<a href="/blogs">Вернуться на главную</a>
+<h1>Создать пост</h1>
+<form id="blogForm" action="/createBlog" method="POST">
+    <label for="title">Заголовок:</label>
+    <input type="text" id="title" name="title" required><br>
+
+    <label for="desc">Описание:</label>
+    <textarea id="desc" name="desc"></textarea><br>
+
+    <label for="image">URL</label>
+    <input type="text" id="image" name="image"><br>
+
+    <button type="submit">Создать пост</button>
+</form>
+
+<script>
+    document.getElementById('blogForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const formData = {
+            title: document.getElementById('title').value,
+            desc: document.getElementById('desc').value,
+            image: document.getElementById('image').value.trim(),
+        };
+
+        try {
+            const response = await fetch('/createBlog', {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('isAuthenticated')}`
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                const data = await response.json()
+                window.location.href='blogs'
+            } else {
+                const errorData = await response.json();
+                console.error('Error creating blog:', errorData);
+            }
+        } catch (error) {
+            console.error('Error creating blog:', error);
+        }
+    });
+</script>
+</body>
+</html>
