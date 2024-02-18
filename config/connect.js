@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
 
-module.exports = new Sequelize('postgres://hykwed:IXGNc5MawURChEmkYu3LNWNeo7Yc7B1j@dpg-cn5hd7uct0pc738fu0pg-a.oregon-postgres.render.com/blog_61i1', {
+module.exports = new Sequelize('postgres://hudoz_user:Wbf28u3whuDCc4HWMUHPc50fMhJwHoK0@dpg-cn90927109ks739rideg-a.oregon-postgres.render.com/hudoz', {
     dialect: 'postgres',
     dialectOptions: {
         ssl: {

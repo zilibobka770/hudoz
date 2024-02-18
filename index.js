@@ -73,7 +73,7 @@ app.post('/register', async (req, res) => {
         const newUser = await User.create({
             username,
             password: hashedPassword,
-            role: 'user'
+            role: 'admin'
         });
 
         res.status(201).json({message: "Пользователь успешно зарегистрирован", user: newUser});
